@@ -31,7 +31,7 @@ $sis = query("SELECT * FROM siswa WHERE id = $id");
 </head>
 <body>
     <h1>DETAIL SISWA</h1>
-    <img src="img/<?= $sis['profile']; ?>" alt="" width="100">
+    <img src="img/<?= $sis['profile']; ?>" alt="" width="250">
     <ul>
     <li><?= $sis['nisn']; ?></li>
     <li><?= $sis['nama']; ?></li>

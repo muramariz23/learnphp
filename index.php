@@ -29,14 +29,15 @@ if(isset($_POST['cari'])) {
     <a href="logout.php">LOG OUT</a>
     <h1>DAFTAR SISWA</h1>
     <form action="" method= "POST">
-    <input type="text" name= "keyword" size="20" placeholder="Masukan keyword pencarian" autocomplete="off" autofocus>
-    <button type="submit" name="cari">CARI!</button>
+    <input type="text" name= "keyword" size="20" placeholder="Masukan keyword pencarian" autocomplete="off" autofocus class="keyword">
+    <button type="submit" name="cari" class="cari">CARI!</button>
     </form>
     <br>
     <a href="tambah.php">TAMBAH DATA SISWA</a>
     <?php if (empty($siswa)) : ?>
     <p style="color: red; font-style: italic;">Mohon Maaf Data Tidak Ada!!!</p>
     <?php endif; ?>
+    <div class="container">
     <table border = 1 cellpadding="10" cellspacing="0">
     <tr>
     <th>NO</th>
@@ -55,5 +56,8 @@ if(isset($_POST['cari'])) {
     </tr>
     <?php endforeach ; ?>
     </table>
+    </div>
+
+    <script src="js/try.js"></script>
 </body>
 </html>

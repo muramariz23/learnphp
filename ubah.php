@@ -42,7 +42,7 @@ if (isset($_POST['ubah'])){
 </head>
 <body>
     <h1>FORM UBAH DATA</h1>
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?= $sis['id']; ?>">
     <ul>
     <li>
@@ -70,15 +70,18 @@ if (isset($_POST['ubah'])){
     </label>
     </li>
     <li>
+    <input type="hidden" name="profile_lama" value="<?= $sis['profile']; ?>">
     <label>
         PROFILE :
-        <input type="text" name="profile" autofocus required value = "<?= $sis['profile']; ?>">
+        <input type="file" name="profile" autofocus class="gambar" onchange="preview()">
     </label>
+    <img src="img/<?= $sis['profile']; ?>" width="150" style="display: block;" class="img-preview">
     </li>
     <li>
     <button type="submit" name="ubah">UBAH DATA</button>
     </li>
     </ul>
     </form>
+    <script src="js/try.js">//menghubungkan file script dengan file ubah</script>
 </body>
 </html>

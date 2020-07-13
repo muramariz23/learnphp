@@ -32,7 +32,7 @@ if (isset($_POST['tambah'])){
 </head>
 <body>
     <h1>FORM TAMBAH DATA</h1>
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
     <ul>
     <li>
     <label>
@@ -61,13 +61,16 @@ if (isset($_POST['tambah'])){
     <li>
     <label>
         PROFILE :
-        <input type="text" name="profile" autofocus required>
+        <input type="file" name="profile" autofocus class="gambar" onchange="preview()">
     </label>
+    <img src="img/no_photo.jpg" width="150" style="display: block;" class="img-preview">
     </li>
     <li>
     <button type="submit" name="tambah">TAMBAH DATA</button>
     </li>
     </ul>
     </form>
+
+<script src="js/try.js">//menghubungkan file tambah dengan file javascript</script>
 </body>
 </html>

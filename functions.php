@@ -20,6 +20,58 @@ while ($row = mysqli_fetch_assoc($result)) {
     }
     return $rows;
 }
+//fungsi untuk mengupload file
+function upload(){
+    //mengambil data gambar
+    $nama_file = $_FILES['profile']['name'];
+    $type_file = $_FILES['profile']['type'];
+    $ukuran_file = $_FILES['profile']['size'];
+    $error = $_FILES['profile']['error'];
+    $tmp_file = $_FILES['profile']['tmp_name'];
+
+    //ketika gambar tidak dipilih
+    if($error == 4) {
+//         echo "<script>
+//     alert('silahkan pilih gambar terlebih dahulu!');
+// </script>";
+return "no_photo.jpg";
+    }
+    //cek extensi file
+    $daftar_gambar = ['jpg', 'jpeg', 'png'];
+    $extensi = explode('.', $nama_file);
+    $extensi = strtolower(end($extensi));
+    if(!in_array($extensi, $daftar_gambar)){
+        echo "<script>
+        alert('extensi gambar tidak bisa dipakai/bukan gambar!');
+    </script>";
+    return false;
+    }
+    //mengecek type file
+    if($type_file != 'image/jpeg' && $type_file != 'image/png'){
+        echo "<script>
+        alert('extensi gambar tidak bisa dipakai/bukan gambar!');
+    </script>";
+    return false;
+    }
+    //mengecek ukuran file
+    //maksimal 5Mb / 5000000 byte
+    if ($ukuran_file > 5000000) {
+        echo "<script>
+        alert('ukuran gambar terlalu besar!');
+    </script>";
+    return false;
+    }
+    //lolos pengecekan
+    //generate nama file baru agar tidak ada kesamaan nama
+    $nama_file_baru = uniqid();
+    $nama_file_baru .= '.';
+    $nama_file_baru .= $extensi;
+    //siap untuk di upload
+    move_uploaded_file($tmp_file, 'img/' . $nama_file_baru);
+
+    return $nama_file_baru;
+}
+
 //fungsi untuk tambah
 function tambah($data)
 {
@@ -30,7 +82,14 @@ function tambah($data)
     $nama = htmlspecialchars($data['nama']);
     $email = htmlspecialchars($data['email']);
     $jurusan = htmlspecialchars($data['jurusan']);
-    $profile = htmlspecialchars($data['profile']);
+    //$profile = htmlspecialchars($data['profile']);
+
+    //mengambil gambar dari data
+    $profile = upload();
+    //pengecekan gambar jika kosong
+    if(!$profile) {
+        return false;
+    }
     //memasukan data ke database melalui wadah variabel
     $query = "INSERT INTO siswa VALUES (null, '$nisn', '$nama', '$email', '$jurusan', '$profile')";
     //melakukan query
@@ -43,10 +102,17 @@ function tambah($data)
 //fungsi untuk menghapus data
 function hapus($id){
     $conn = koneksi();
+    //menghapus gambar
+    $sis = query("SELECT * FROM siswa WHERE id = $id");
+    if ($sis['profile'] != 'nophoto.jpg') {
+        unlink('img/' . $sis['profile']);
+    }
+    
+
     mysqli_query($conn, "DELETE FROM siswa WHERE id = $id") or die(mysqli_error($conn));
     return mysqli_affected_rows($conn);
 }
-//fungsi untuk menubah data
+//fungsi untuk mengubah data
 function ubah($data)
 {
     //koneksi ke database
@@ -57,7 +123,17 @@ function ubah($data)
     $nama = htmlspecialchars($data['nama']);
     $email = htmlspecialchars($data['email']);
     $jurusan = htmlspecialchars($data['jurusan']);
-    $profile = htmlspecialchars($data['profile']);
+    $profile_lama = htmlspecialchars($data['profile_lama']);
+    //update gambar
+    $profile = upload();
+    if (!$profile) {
+        return false;
+    }
+
+    if ($profile == 'nophoto.jpg') {
+        $profile = $profile_lama;
+    }
+
     //memasukan data ke database melalui wadah variabel
     $query = "UPDATE siswa SET
                 nisn = '$nisn',
